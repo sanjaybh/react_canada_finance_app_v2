@@ -1,7 +1,12 @@
-import React from 'react'
+import Login from '../Login/Login';
+import UserContext from '../../context/UserContext'
+import { useContext } from 'react'
 
 export default function About() {
-  return (
+    const { loggedIn } = useContext(UserContext)
+    if(!loggedIn) return <Login />
+
+    return (
       <div className="py-16 bg-white min-h-screen">
           <div className="container m-auto px-6 text-gray-600 md:px-12 xl:px-6">
               <div className="space-y-6 md:space-y-0 md:flex md:gap-6 lg:items-center lg:gap-12">

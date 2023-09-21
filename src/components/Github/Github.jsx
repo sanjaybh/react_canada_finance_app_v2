@@ -1,19 +1,14 @@
-import React, { useEffect, useState } from 'react'
-
+import Login from './../Login/Login';
+//import React, { useEffect, useState } from 'react'
+import UserContext from '../../context/UserContext'
+import { useContext } from 'react'
 import { useLoaderData } from 'react-router-dom'
 
 function Github() {
-    const data = useLoaderData()
-    // const [data, setData] = useState([])
-    // useEffect(() => {
-    //  fetch('https://api.github.com/users/hiteshchoudhary')
-    //  .then(response => response.json())
-    //  .then(data => {
-    //     console.log(data);
-    //     setData(data)
-    //  })
-    // }, [])
-    
+  const { loggedIn } = useContext(UserContext)
+
+  const data = useLoaderData()
+  if(!loggedIn) return <Login />
   return (
     <div className='text-center m-4 bg-gray-600 text-white p-4 text-3xl'>Github followers: {data.id}
       <img src={data.avatar_url} alt="Git picture" width={300} />

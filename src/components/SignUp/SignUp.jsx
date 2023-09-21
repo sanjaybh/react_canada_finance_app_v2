@@ -1,16 +1,23 @@
 import Info from "../Info/Info"
-
+import UserContext from "../../context/UserContext";
+import { formSubmitHandler } from "../../helper/Auth";
+import {useContext} from 'react';
 export default function SignUp() {
+    const { loggedIn } = useContext(UserContext);
+        
     const handleSubmit = function(event){
         event.preventDefault();
-        const formData = new FormData(event.currentTarget);
-        const user = {}
-        for (let entry of formData.entries()) {
-            user[entry[0]] = entry[1]
-        }
+        const user = formSubmitHandler(event)
         console.log(user)
+
+        console.log("loggedIn - "+loggedIn)
+        
+        if(loggedIn){
+            console.log("API Call will be made from here")
+        }
+        //TODO - call API and submit data
     }
-    
+
     const main_className = "w-100 mt-2 py-3 px-3 rounded-lg bg-white border border-gray-400 text-gray-800 font-semibold focus:border-orange-500 focus:outline-none";
     return (
         <div className="relative flex items-top justify-center min-h-[700px] bg-white sm:items-center sm:pt-0">

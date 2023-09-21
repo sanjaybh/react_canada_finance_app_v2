@@ -1,6 +1,11 @@
-import React from 'react'
+import Login from '../Login/Login';
+import UserContext from '../../context/UserContext'
+import { useContext } from 'react'
 
 export default function Contact() {
+    const { loggedIn } = useContext(UserContext)
+    if(!loggedIn) return <Login />
+    
     return (
         <div className="relative flex items-top justify-center min-h-[700px] bg-white sm:items-center sm:pt-0">
             <div className="max-w-6xl mx-auto sm:px-6 lg:px-8">

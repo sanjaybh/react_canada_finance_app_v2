@@ -8,10 +8,10 @@ import Contact from './components/Contact/Contact.jsx'
 import Home from './components/Home/Home.jsx'
 import Layout from './Layout.jsx'
 import Login from './components/Login/Login';
-import React from 'react'
 import ReactDOM from 'react-dom/client'
 import SignUp from './components/SignUp/SignUp';
 import User from './components/User/User.jsx'
+import UserContextProvider from './context/UserContextProvider'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -28,7 +28,7 @@ const router = createBrowserRouter(
 )
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  <UserContextProvider>
     <RouterProvider router={router} />
-  </React.StrictMode>,
+  </UserContextProvider>
 )

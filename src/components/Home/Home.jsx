@@ -1,7 +1,12 @@
-import React from 'react'
 import { Link } from 'react-router-dom';
+import Login from '../Login/Login';
+import UserContext from '../../context/UserContext'
+import { useContext } from 'react'
 
 export default function Home() {
+    const { loggedIn } = useContext(UserContext)
+    if(!loggedIn) return <Login />
+
     return (
         <div className="mx-auto w-full max-w-7xl">
             <aside className="relative overflow-hidden text-black rounded-lg sm:mx-16 mx-2 sm:py-16">
