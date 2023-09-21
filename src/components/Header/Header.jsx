@@ -6,7 +6,7 @@ import { useContext } from 'react'
 
 export default function Header() {
     const { loggedIn } = useContext(UserContext)
-    console.log("Log in - "+loggedIn);
+    //console.log("Log in - "+loggedIn);
 
     const handleLogOut = () =>{
         SignOut()
@@ -36,6 +36,7 @@ export default function Header() {
                             Get started
                         </Link>
                     </div>
+                    {/* Other Menu options are available here */}
                     <div
                         className="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1"
                         id="mobile-menu-2"
