@@ -26,6 +26,7 @@ const request = ( url, params = {}, method = 'GET' ) => {
     if ( 'GET' === method ) {
         url += '?' + ( new URLSearchParams( params ) ).toString();
     } else {
+        options.headers = { 'Content-Type': 'application/json' }
         options.body = JSON.stringify( params );
     }
     

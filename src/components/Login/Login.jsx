@@ -1,4 +1,4 @@
-import { formSubmitHandler, get } from '../../helper/Auth';
+import { formSubmitHandler, get, post } from '../../helper/Auth';
 import {useContext, useState} from 'react';
 
 import Info from "../Info/Info"
@@ -8,33 +8,34 @@ import { useNavigate } from "react-router-dom";
 export default function Login() {
     const [email, setEmail] = useState("sanjay@gmail.com")
     const [password, setPassword] = useState("sanjay")
-    const [updatedUser, setUpdatedUser] = useState()
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
 
     const navigate = useNavigate();
-    const { loggedIn, setLoggedIn } = useContext(UserContext);
+    const { setLoggedIn, loggedInUser, setLoggedInUser } = useContext(UserContext);
     
+    const BASE_URL = import.meta.env.VITE_REACT_APP_URL;
+
     const handleSubmit = async function(event){
         event.preventDefault();
         const user = formSubmitHandler(event)
-
+        
         //Get User authenticated
-        await get( 'https://weg8bz43zy.us.aircode.run/auth/login', user )
+        await post( `${BASE_URL}/auth/login`, user)
         .then( response => {
             setLoading(true)
-            if(response.success === true){
-                setUpdatedUser(response.data);
-                setLoggedIn(true);
-                navigate("/");
-                setLoading(false);
-                setError(false)
-            }else{
-                setUpdatedUser(response);
-                setLoggedIn(false);
-                setError(true);
-                navigate("/login");
+            if(response.success === true || response.success === "true"){
+                setLoggedIn(true)
                 setLoading(false)
+                setError(false)
+                setLoggedInUser(response.data)
+                navigate("/")
+            }else{
+                setLoggedIn(false)
+                setError(true)
+                setLoading(false)
+                setLoggedInUser(response)
+                navigate("/login")
             }
         })
     }
@@ -47,9 +48,8 @@ export default function Login() {
                     <div className="grid grid-cols-1 md:grid-cols-2">
                         <Info title="Login" />
                         <form className="p-6 flex flex-col justify-center" onSubmit={handleSubmit}>
-                            {!error ? "": <div className="text-red-700">Error: {updatedUser.message} </div> }
-                            {loading && <div className="text-gray-700">loading...</div>}
-                            
+                            {!error ? "": <div className="text-red-700 font-bold">Error: {loggedInUser.message} </div> }
+                            {loading && <div className="text-green-700 font-bold">loading...</div>}
                             <div className="flex flex-col mt-2">
                                 <label htmlFor="email" className="hidden">
                                     Email
