@@ -20,23 +20,21 @@ export default function Login() {
         event.preventDefault();
         const user = formSubmitHandler(event)
         
-        //Get User authenticated
+        setLoading(true)
         await post( `${BASE_URL}/auth/login`, user)
-        .then( response => {
-            setLoading(true)
+        .then( response => {            
             if(response.success === true || response.success === "true"){
-                setLoggedIn(true)
-                setLoading(false)
+                setLoggedIn(true)                
                 setError(false)
                 setLoggedInUser(response.data)
                 navigate("/")
             }else{
                 setLoggedIn(false)
                 setError(true)
-                setLoading(false)
                 setLoggedInUser(response)
                 navigate("/login")
             }
+            setLoading(false)
         })
     }
     const main_className = "w-100 mt-2 py-3 px-3 rounded-lg bg-white border border-gray-400 text-gray-800 font-semibold focus:border-orange-500 focus:outline-none";
@@ -49,7 +47,7 @@ export default function Login() {
                         <Info title="Login" />
                         <form className="p-6 flex flex-col justify-center" onSubmit={handleSubmit}>
                             {!error ? "": <div className="text-red-700 font-bold">Error: {loggedInUser.message} </div> }
-                            {loading && <div className="text-green-700 font-bold">loading...</div>}
+                            {loading ? <div className="text-green-700 font-bold">loading...</div> : loading }
                             <div className="flex flex-col mt-2">
                                 <label htmlFor="email" className="hidden">
                                     Email
@@ -84,11 +82,12 @@ export default function Login() {
                             </div>
 
                             <button
+                                disabled={loading}
                                 type="submit"
                                 className="md:w-32 bg-orange-700 hover:bg-blue-dark text-white font-bold py-3 px-6 rounded-lg 
                                 mt-3 hover:bg-orange-600 transition ease-in-out duration-300"
                             >
-                                Submit
+                                {loading ? "Loading...":"Submit"}
                             </button>
                         </form>
                     </div>

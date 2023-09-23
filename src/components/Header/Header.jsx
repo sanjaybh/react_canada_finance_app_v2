@@ -6,8 +6,7 @@ import { useContext } from 'react'
 
 export default function Header() {
     const { loggedIn } = useContext(UserContext)
-    //console.log("Log in - "+loggedIn);
-
+    
     const handleLogOut = () =>{
         SignOut()
     }
@@ -29,15 +28,17 @@ export default function Header() {
                     <div className="flex items-center lg:order-2">
                         {loggedIn ? <Link to="#" onClick={handleLogOut} className={logInLogOut} >Log out </Link> : <Link to="/login" className={logInLogOut} >Log in </Link>}
                         
+                        {/* {if logged in then show "Edit Profile" else "Get Started"} */}                        
                         <Link
                             to="/signup"
                             className="text-white bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none"
                         >
-                            Get started
+                            {loggedIn ? "Edit Profile" : "Get Started"}
                         </Link>
                     </div>
-                    
-                    <div
+                    {/* {if logged in then show show menu else hide menu banner} */}
+                    {loggedIn ? 
+                    <div 
                         className="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1"
                         id="mobile-menu-2"
                     >
@@ -91,6 +92,7 @@ export default function Header() {
                             
                         </ul>
                     </div>
+                     : " "}
                 </div>
             </nav>
         </header>
