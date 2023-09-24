@@ -1,5 +1,5 @@
 import { formSubmitHandler, post } from "../../helper/Auth";
-import {useContext, useState} from 'react';
+import { useContext, useState } from 'react';
 import { useEffect, useRef } from "react";
 
 import Info from "../Info/Info"
@@ -8,9 +8,9 @@ import UserContext from "../../context/UserContext";
 export default function SignUp() {
     const [loading, setLoading] = useState(false);
     const [resMessage, setResMessage] = useState({});    
-    const [formMode, setFormMode] = useState("CREATE_FORM")
-    const [inputs, setInputs] = useState({});
-    const { loggedIn, setLoggedIn, loggedInUser, setLoggedInUser } = useContext(UserContext);
+    const [formMode, setFormMode] = useState()
+    const [inputs, setInputs] = useState({name:"",email:"", phone:"",address:{city:"", country:""}});
+    const {loggedIn, loggedInUser} = useContext(UserContext);
 
     //Form References - Form Ref :- TODO - need to be changed
     const inputNameRef = useRef(null)
@@ -48,30 +48,40 @@ export default function SignUp() {
         //setInputs(values => ({...values, [name]: value}))
       }
 
-    const handleUserSubmit = async function(event){
-        event.preventDefault();
+    const handleUserSubmit = async function(event, _formMode){              
         const BASE_URL = import.meta.env.VITE_REACT_APP_URL;
-        const user = formSubmitHandler(event)
+        let user;
+        let endpoint;
+        if(_formMode == "DELTE_FORM"){
+            user = loggedInUser;
+            endpoint = "deleteUser"
+            user["disabled"] = !loggedInUser.disabled
+            user["accessToken"] = loggedInUser?.accessToken
+        }else {
+            event.preventDefault();
+            user = formSubmitHandler(event)
+            const address = {"city": user.city, "country": user.country}
+            user.address = address;
+            delete user.city;
+            delete user.country;
 
-        const address = {"city": user.city, "country": user.country}
-        user.address = address;
-        delete user.city;
-        delete user.country;
-        console.log("User - "+JSON.stringify(user))
-        if(user){
-            setLoading(true)
-            let endpoint = "CREATE_FORM"
+            if(!loggedIn){
+                setFormMode("CREATE_FORM")
+            }
+            
             //CREATE_FORM, UPDATE_FORM
-            if(formMode == "CREATE_FORM"){
+            if(formMode == "CREATE_FORM" || formMode == undefined){
                 endpoint = "addUser"
             }else{
                 delete user.email
                 delete user.password
                 //setLoggedInUser(inputs)
                 //Setting up token with the user
-                user["accessToken"] = loggedInUser.accessToken
+                user["accessToken"] = loggedInUser?.accessToken
                 endpoint = "updateUser"
             }
+        }
+        if(user){
             setLoading(true)
             //Get User authenticated
             await post( `${BASE_URL}/MasterEntry/${endpoint}`, user)
@@ -84,6 +94,12 @@ export default function SignUp() {
                 setLoading(false)
             })
         }
+    }
+
+    const handleDeleteUser = (e) => {
+        e.preventDefault();
+        setFormMode("DELTE_FORM")
+        handleUserSubmit({}, "DELTE_FORM")
     }
 
     const main_className = "w-100 mt-2 py-3 px-3 rounded-lg bg-white border border-gray-400 text-gray-800 font-semibold focus:border-orange-500 focus:outline-none";
@@ -175,7 +191,7 @@ export default function SignUp() {
                                     name="city"
                                     id="city"
                                     onChange={handleChange}
-                                    value={inputs?.address?.city || ""} 
+                                    value={inputs?.address.city || ""} 
                                     required
                                     placeholder="City"
                                     className={main_className}
@@ -198,14 +214,26 @@ export default function SignUp() {
                                 />
                             </div>
 
-                            <button
-                                type="submit"
-                                className="md:w-32 bg-orange-700 hover:bg-blue-dark text-white font-bold py-3 px-6 rounded-lg 
-                                mt-3 hover:bg-orange-600 transition ease-in-out duration-300"
-                            >
-                                Submit
-                            </button>
-                        </form>
+                            <div className="flex flex-row">
+                                <button
+                                    type="submit"
+                                    disabled={inputs.disabled}
+                                    className="md:w-32 bg-orange-700 hover:bg-blue-dark text-white font-bold py-3 px-6 rounded-lg 
+                                    mt-3 hover:bg-orange-600 transition ease-in-out duration-300"
+                                >
+                                    Submit
+                                </button>
+                                <button 
+                                    type="Delete"
+                                    hidden={!loggedIn}
+                                    onClick={handleDeleteUser}
+                                    className="md:w-32 bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded-md ml-5 mt-3 transition ease-in-out duration-300"
+                                >
+                                    {inputs.disabled ? "Enable" : "Disable"}
+                                </button>
+                            </div>
+                            { (inputs.disabled && loggedIn) ? <div>Modifications not allowed, kindly enable user profile</div> : (loggedIn) ? <div>You can disable user profile</div>: ""}
+                        </form>                        
                     </div>
                 </div>
             </div>

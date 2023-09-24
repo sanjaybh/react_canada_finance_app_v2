@@ -1,4 +1,4 @@
-import { formSubmitHandler, get, post } from '../../helper/Auth';
+import { formSubmitHandler, post } from '../../helper/Auth';
 import {useContext, useState} from 'react';
 
 import Info from "../Info/Info"
@@ -19,13 +19,14 @@ export default function Login() {
     const handleSubmit = async function(event){
         event.preventDefault();
         const user = formSubmitHandler(event)
-        
+
         setLoading(true)
         await post( `${BASE_URL}/auth/login`, user)
-        .then( response => {            
+        .then( response => {
             if(response.success === true || response.success === "true"){
-                setLoggedIn(true)                
+                setLoggedIn(true)
                 setError(false)
+                //TODO- Create a different variable for Token
                 setLoggedInUser(response.data)
                 navigate("/")
             }else{
