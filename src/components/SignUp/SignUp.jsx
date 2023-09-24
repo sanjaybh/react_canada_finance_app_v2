@@ -7,28 +7,21 @@ import UserContext from "../../context/UserContext";
 
 export default function SignUp() {
     const [loading, setLoading] = useState(false);
-    const [resMessage, setResMessage] = useState({});
-    const { loggedIn, setLoggedIn, loggedInUser, setLoggedInUser } = useContext(UserContext);
+    const [resMessage, setResMessage] = useState({});    
     const [formMode, setFormMode] = useState("CREATE_FORM")
+    const [inputs, setInputs] = useState({});
+    const { loggedIn, setLoggedIn, loggedInUser, setLoggedInUser } = useContext(UserContext);
 
     //Form References - Form Ref :- TODO - need to be changed
     const inputNameRef = useRef(null)
     const inputEmailRef = useRef(null)
     const inputPasswordRef = useRef(null)
-    const inputPhoneRef = useRef(null)
-    const inputCountryRef = useRef(null)
-    const inputCityRef = useRef(null)
     
     useEffect(()=>{
-        inputNameRef.current.focus();
-        if(loggedIn){
-            console.log("User - "+JSON.stringify(loggedInUser))
-            inputNameRef.current.value = loggedInUser.name
-            inputEmailRef.current.value = loggedInUser.email
-            inputPasswordRef.current.value = loggedInUser.password
-            inputPhoneRef.current.value = loggedInUser.phone
-            inputCountryRef.current.value = loggedInUser.address.country
-            inputCityRef.current.value = loggedInUser.address.city
+        //inputNameRef.current.focus();
+        
+        if(loggedIn){ 
+            setInputs(loggedInUser)
 
             //Disable Email and Password, and dont send back for update
             inputEmailRef.current.disabled = true
@@ -36,7 +29,24 @@ export default function SignUp() {
 
             setFormMode("UPDATE_FORM")
         }
-    }, [loggedInUser])
+    }, [])
+
+    const handleChange = (event) => { 
+        const name = event.target.name;
+        const value = event.target.value;
+        let objV;
+        setInputs(values => {
+            objV = {...values}
+            if(name =="city" || name == "country"){
+                objV.address[name] = value
+            }else{
+                objV[name] = value
+            }
+            values = objV;
+            return {...values}
+        })
+        //setInputs(values => ({...values, [name]: value}))
+      }
 
     const handleUserSubmit = async function(event){
         event.preventDefault();
@@ -47,16 +57,17 @@ export default function SignUp() {
         user.address = address;
         delete user.city;
         delete user.country;
-
+        console.log("User - "+JSON.stringify(user))
         if(user){
             setLoading(true)
-            let endpoint = ""
+            let endpoint = "CREATE_FORM"
             //CREATE_FORM, UPDATE_FORM
             if(formMode == "CREATE_FORM"){
                 endpoint = "addUser"
             }else{
                 delete user.email
                 delete user.password
+                //setLoggedInUser(inputs)
                 //Setting up token with the user
                 user["accessToken"] = loggedInUser.accessToken
                 endpoint = "updateUser"
@@ -82,7 +93,7 @@ export default function SignUp() {
                 <div className="mt-8 overflow-hidden">
                     <div className="grid grid-cols-1 md:grid-cols-2">
                         <Info title="Sign Up"/>
-                        <form className="p-6 flex flex-col justify-center" onSubmit={handleUserSubmit}>
+                        <form id="signUpForm" className="p-6 flex flex-col justify-center" onSubmit={handleUserSubmit}>
                             {loading && <div className="text-green-700 font-bold">loading...</div>}
                             {resMessage ? <div className="text-red-700 font-bold">{resMessage.message}</div> : ""}
 
@@ -94,6 +105,8 @@ export default function SignUp() {
                                     type="text"
                                     name="name" 
                                     id="name"
+                                    onChange={handleChange}
+                                    value={inputs?.name || ""} 
                                     ref={inputNameRef}
                                     minLength={3}
                                     required
@@ -110,6 +123,8 @@ export default function SignUp() {
                                     type="email"
                                     name="email"
                                     required
+                                    onChange={handleChange}
+                                    value={inputs?.email || ""} 
                                     id="email"
                                     ref={inputEmailRef}
                                     placeholder="Email"
@@ -123,6 +138,8 @@ export default function SignUp() {
                                 </label>
                                 <input
                                     type="password"
+                                    onChange={handleChange}
+                                    value={inputs?.password || "*******"} 
                                     name="password"
                                     required
                                     minLength={6}
@@ -140,9 +157,10 @@ export default function SignUp() {
                                 <input
                                     type="tel"
                                     name="phone"
+                                    value={inputs?.phone || ""} 
+                                    onChange={handleChange}
                                     required
                                     id="phone"
-                                    ref={inputPhoneRef}
                                     placeholder="Telephone Number"
                                     className={main_className}
                                 />
@@ -156,7 +174,8 @@ export default function SignUp() {
                                     type="text"
                                     name="city"
                                     id="city"
-                                    ref={inputCityRef}
+                                    onChange={handleChange}
+                                    value={inputs?.address?.city || ""} 
                                     required
                                     placeholder="City"
                                     className={main_className}
@@ -170,8 +189,9 @@ export default function SignUp() {
                                 <input
                                     type="text"
                                     name="country"
+                                    value={inputs?.address?.country || ""} 
                                     required
-                                    ref={inputCountryRef}
+                                    onChange={handleChange}
                                     id="country"
                                     placeholder="Country"
                                     className={main_className}

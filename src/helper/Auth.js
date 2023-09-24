@@ -10,6 +10,16 @@ export const isEmptyObject = (obj) => {
     return JSON.stringify(obj) === '{}'
 }
 
+export const formUpdateHandler = (currUser, event) => {
+    const formData = new FormData();    
+    const user = currUser;
+    for (let entry of formData.entries()) {
+        //user[entry[0]] = entry[1]
+        formData.set(user[entry[0]], entry[1]);
+    }
+    return formData;
+}
+
 export const formSubmitHandler = (event) => {
     const formData = new FormData(event.currentTarget);
     const user = {}
