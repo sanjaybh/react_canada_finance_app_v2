@@ -10,7 +10,7 @@ export const isEmptyObject = (obj) => {
     return JSON.stringify(obj) === '{}'
 }
 
-export const formUpdateHandler = (currUser, event) => {
+export const formUpdateHandler = (currUser, event) => {//NOT IN USE
     const formData = new FormData();    
     const user = currUser;
     for (let entry of formData.entries()) {

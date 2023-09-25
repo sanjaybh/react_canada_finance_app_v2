@@ -9,17 +9,16 @@ export default function SignUp() {
     const [loading, setLoading] = useState(false);
     const [resMessage, setResMessage] = useState({});    
     const [formMode, setFormMode] = useState()
-    const [inputs, setInputs] = useState({name:"",email:"", phone:"",address:{city:"", country:""}});
-    const {loggedIn, loggedInUser} = useContext(UserContext);
+    const [inputs, setInputs] = useState({name:"",email:"", phone:"",address:{city:"", country:""}, disabled:false});
+    const {loggedIn, loggedInUser, setLoggedInUser} = useContext(UserContext);
 
     //Form References - Form Ref :- TODO - need to be changed
     const inputNameRef = useRef(null)
     const inputEmailRef = useRef(null)
     const inputPasswordRef = useRef(null)
-    
+
     useEffect(()=>{
-        //inputNameRef.current.focus();
-        
+        //inputNameRef.current.focus();        
         if(loggedIn){ 
             setInputs(loggedInUser)
 
@@ -46,15 +45,18 @@ export default function SignUp() {
             return {...values}
         })
         //setInputs(values => ({...values, [name]: value}))
-      }
+    }
 
-    const handleUserSubmit = async function(event, _formMode){              
+    const handleUserSubmit = async function(event, _formMode){
         const BASE_URL = import.meta.env.VITE_REACT_APP_URL;
         let user;
         let endpoint;
+        //let formMode;
         if(_formMode == "DELTE_FORM"){
+            //formMode = _formMode
             user = loggedInUser;
             endpoint = "deleteUser"
+            //user["disabled"] = (loggedInUser.disabled == "true") ? "false" : "true"
             user["disabled"] = !loggedInUser.disabled
             user["accessToken"] = loggedInUser?.accessToken
         }else {
@@ -67,12 +69,9 @@ export default function SignUp() {
 
             if(!loggedIn){
                 setFormMode("CREATE_FORM")
-            }
-            
-            //CREATE_FORM, UPDATE_FORM
-            if(formMode == "CREATE_FORM" || formMode == undefined){
                 endpoint = "addUser"
             }else{
+                setFormMode("UPDATE_FORM")
                 delete user.email
                 delete user.password
                 //setLoggedInUser(inputs)
@@ -88,6 +87,10 @@ export default function SignUp() {
             .then( response => {
                 if(response.success === true || response.success === "true"){
                     setResMessage(response)
+                    // setLoggedInUser(prevState => ({
+                    //     ...prevState, user
+                    //   }))
+                    setLoggedInUser(user)
                 }else{
                     setResMessage(response)
                 }
@@ -96,10 +99,10 @@ export default function SignUp() {
         }
     }
 
-    const handleDeleteUser = (e) => {
-        e.preventDefault();
-        setFormMode("DELTE_FORM")
-        handleUserSubmit({}, "DELTE_FORM")
+    const handleDeleteUser = () => {
+        const requestMode = "DELTE_FORM";
+        setFormMode(requestMode)
+        handleUserSubmit({}, requestMode)
     }
 
     const main_className = "w-100 mt-2 py-3 px-3 rounded-lg bg-white border border-gray-400 text-gray-800 font-semibold focus:border-orange-500 focus:outline-none";
@@ -223,15 +226,16 @@ export default function SignUp() {
                                 >
                                     Submit
                                 </button>
-                                <button 
-                                    type="Delete"
-                                    hidden={!loggedIn}
-                                    onClick={handleDeleteUser}
-                                    className="md:w-32 bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded-md ml-5 mt-3 transition ease-in-out duration-300"
-                                >
-                                    {inputs.disabled ? "Enable" : "Disable"}
-                                </button>
+                                
                             </div>
+                            <button 
+                                type="Delete"
+                                hidden={!loggedIn}
+                                onClick={handleDeleteUser}
+                                className="md:w-32 bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded-md ml-5 mt-3 transition ease-in-out duration-300"
+                            >
+                                {inputs.disabled ? "Enable" : "Disable"}
+                            </button>
                             { (inputs.disabled && loggedIn) ? <div>Modifications not allowed, kindly enable user profile</div> : (loggedIn) ? <div>You can disable user profile</div>: ""}
                         </form>                        
                     </div>
