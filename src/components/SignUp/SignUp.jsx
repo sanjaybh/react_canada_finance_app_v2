@@ -83,8 +83,8 @@ export default function SignUp() {
         if(user){
             setLoading(true)
 
-            console.log("_formMode - "+formMode)
-            console.log("user - "+ JSON.stringify(user))
+            //console.log("_formMode - "+formMode)
+            //console.log("user - "+ JSON.stringify(user))
             //Get User authenticated
             await post( `${BASE_URL}/MasterEntry/${endpoint}`, user)
             .then( response => {
