@@ -18,7 +18,7 @@ export default function SignUp() {
     const inputPasswordRef = useRef(null)
 
     useEffect(()=>{
-        //inputNameRef.current.focus();        
+        //inputNameRef.current.focus();
         if(loggedIn){ 
             setInputs(loggedInUser)
 
@@ -53,11 +53,11 @@ export default function SignUp() {
         let endpoint;
         //let formMode;
         if(_formMode == "DELTE_FORM"){
-            //formMode = _formMode
-            user = loggedInUser;
+            setFormMode("DELTE_FORM")
+            user = inputs//loggedInUser;
             endpoint = "deleteUser"
-            //user["disabled"] = (loggedInUser.disabled == "true") ? "false" : "true"
-            user["disabled"] = !loggedInUser.disabled
+            //user["disabled"] = !loggedInUser.disabled
+            user.disabled = !user.disabled || false
             user["accessToken"] = loggedInUser?.accessToken
         }else {
             event.preventDefault();
@@ -74,7 +74,7 @@ export default function SignUp() {
                 setFormMode("UPDATE_FORM")
                 delete user.email
                 delete user.password
-                //setLoggedInUser(inputs)
+                setLoggedInUser(inputs)
                 //Setting up token with the user
                 user["accessToken"] = loggedInUser?.accessToken
                 endpoint = "updateUser"
@@ -82,6 +82,9 @@ export default function SignUp() {
         }
         if(user){
             setLoading(true)
+
+            console.log("_formMode - "+formMode)
+            console.log("user - "+ JSON.stringify(user))
             //Get User authenticated
             await post( `${BASE_URL}/MasterEntry/${endpoint}`, user)
             .then( response => {
