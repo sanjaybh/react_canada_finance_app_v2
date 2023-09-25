@@ -12,6 +12,7 @@ import ReactDOM from 'react-dom/client'
 import SignUp from './components/SignUp/SignUp';
 import User from './components/User/User.jsx'
 import UserContextProvider from './context/UserContextProvider'
+import UserTax from './components/UserTax/UserTax.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -21,6 +22,8 @@ const router = createBrowserRouter(
       <Route path='signup' element={<SignUp />} />
       <Route path='about' element={<About />} />
       <Route path='contact' element={<Contact />} />
+      
+      <Route path='userTax' element={<UserTax />} />
       <Route path='user/:userid' element={<User />} />
       <Route loader={githubInfoLoader} path='github' element={<Github />} />
     </Route>

@@ -72,8 +72,8 @@ export default function SignUp() {
                 endpoint = "addUser"
             }else{
                 setFormMode("UPDATE_FORM")
-                delete user.email
-                delete user.password
+                //delete user.email
+                //delete user.password
                 setLoggedInUser(inputs)
                 //Setting up token with the user
                 user["accessToken"] = loggedInUser?.accessToken
