@@ -5,12 +5,12 @@ import Info from '../Info/Info';
 import Login from '../Login/Login';
 import UserContext from '../../context/UserContext'
 
-export default function UserTax() {
+export default function RentExpenses() {
     const [loading, setLoading ] = useState(false);
     const [resMessage, setResMessage] = useState({});
     const [reqType, setReqType] = useState("NEW_REQUEST");
     const [formData, setFormData] = useState({
-        taxPerYr:0, conversionRate:0, salaryPerYr:0
+        "roomRent": 0, "hydro": 0, "water": 0, "electricity": 0, "wifi": 0, "laundry": 0
     })
 
     const { loggedIn, loggedInUser } = useContext(UserContext);
@@ -18,13 +18,13 @@ export default function UserTax() {
     if(!loggedIn) {<Login />}
     
     const BASE_URL = import.meta.env.VITE_REACT_APP_URL;
-    const endpoint = "getUserTax"
+    const endpoint = "getRentExpenses"
     const dummyUsr = formData;
     dummyUsr["accessToken"] = loggedInUser?.accessToken
 
     useEffect(()=>{
         setLoading(true)
-        post( `${BASE_URL}/userTax/${endpoint}`, dummyUsr)
+        post( `${BASE_URL}/RentExpenses/${endpoint}`, dummyUsr)
         .then( response => {
             if(response.success === true || response.success === "true"){
                 setResMessage(response)
@@ -54,13 +54,13 @@ export default function UserTax() {
         
         let endpoint;
         if(reqType == "NEW_REQUEST"){
-            endpoint = "addUserTax"
+            endpoint = "addExpenses"
         }else if(reqType == "UPDATE_REQUEST"){
-            endpoint = "updateUserTax"
+            endpoint = "updateExpenses"
         }
 
         setLoading(true)
-        await post( `${BASE_URL}/userTax/${endpoint}`, userTaxForm)
+        await post( `${BASE_URL}/RentExpenses/${endpoint}`, userTaxForm)
         .then( response => {
             if(response.success === true || response.success === "true"){
                 setResMessage(response)
@@ -77,21 +77,21 @@ export default function UserTax() {
             <div className="max-w-6xl mx-auto sm:px-6 lg:px-8">
                 <div className="mt-8 overflow-hidden">
                     <div className="grid grid-cols-1 md:grid-cols-2">
-                    <Info title="Get in Touch"/>
+                    <Info title="Rent Expenses/Month"/>
                         
                         <form className="p-6 flex flex-col justify-center" onSubmit={handleUserSubmit}>
                             {loading && <div className="text-green-700 font-bold">loading...</div>}
                             {resMessage ? <div className="text-red-700 font-bold">{resMessage.message}</div> : ""}
                             <div className="flex flex-col">
-                                <label htmlFor="taxPerYr" className="show">
-                                    Tax Per Year
+                                <label htmlFor="roomRent" className="show">
+                                    Room Rent
                                 </label>
                                 <input
                                     type="number"
-                                    name="taxPerYr"
-                                    id="taxPerYr"
+                                    name="roomRent"
+                                    id="roomRent"
                                     onChange={handleChange}
-                                    value={formData.taxPerYr}
+                                    value={formData.roomRent}
                                     required
                                     placeholder="Tax Per Year in %"
                                     className="w-100 mt-2 py-3 px-3 rounded-lg bg-white border border-gray-400 text-gray-800 font-semibold focus:border-orange-500 focus:outline-none"
@@ -99,33 +99,81 @@ export default function UserTax() {
                             </div>
 
                             <div className="flex flex-col mt-2">
-                                <label htmlFor="conversionRate" className="show">
-                                    Conversion Rate
+                                <label htmlFor="hydro" className="show">
+                                    Hydro
                                 </label>
                                 <input
                                     type="number"
-                                    name="conversionRate"
+                                    name="hydro"
+                                    id="hydro"
                                     required
-                                    value={formData.conversionRate}
+                                    value={formData.hydro}
                                     onChange={handleChange}
-                                    id="conversionRate"
-                                    placeholder="Conversion Rate (INR vs CAD)"
+                                    placeholder="Hydro Expenses"
                                     className="w-100 mt-2 py-3 px-3 rounded-lg bg-white border border-gray-400 text-gray-800 font-semibold focus:border-orange-500 focus:outline-none"
                                 />
                             </div>
 
                             <div className="flex flex-col mt-2">
-                                <label htmlFor="salaryPerYr" className="show">
-                                    SalaryPerYr
+                                <label htmlFor="electricity" className="show">
+                                    Electricity
                                 </label>
                                 <input
                                     type="number"
-                                    name="salaryPerYr"
-                                    value={formData.salaryPerYr}
+                                    name="electricity"
+                                    id="electricity"
+                                    value={formData.electricity}
                                     onChange={handleChange}
                                     required
-                                    id="salaryPerYr"
-                                    placeholder="Salary Per Year"
+                                    placeholder="Electricity Expenses"
+                                    className="w-100 mt-2 py-3 px-3 rounded-lg bg-white border border-gray-400 text-gray-800 font-semibold focus:border-orange-500 focus:outline-none"
+                                />
+                            </div>
+
+                            <div className="flex flex-col mt-2">
+                                <label htmlFor="water" className="show">
+                                    Water
+                                </label>
+                                <input
+                                    type="number"
+                                    name="water"
+                                    id="water"
+                                    value={formData.water}
+                                    onChange={handleChange}
+                                    required
+                                    placeholder="Water Expenses"
+                                    className="w-100 mt-2 py-3 px-3 rounded-lg bg-white border border-gray-400 text-gray-800 font-semibold focus:border-orange-500 focus:outline-none"
+                                />
+                            </div>
+
+                            <div className="flex flex-col mt-2">
+                                <label htmlFor="wifi" className="show">
+                                    Wi-fi
+                                </label>
+                                <input
+                                    type="number"
+                                    name="wifi"
+                                    id="wifi"
+                                    value={formData.wifi}
+                                    onChange={handleChange}
+                                    required
+                                    placeholder="Wi-fi Expenses"
+                                    className="w-100 mt-2 py-3 px-3 rounded-lg bg-white border border-gray-400 text-gray-800 font-semibold focus:border-orange-500 focus:outline-none"
+                                />
+                            </div>
+
+                            <div className="flex flex-col mt-2">
+                                <label htmlFor="laundry" className="show">
+                                    Laundry
+                                </label>
+                                <input
+                                    type="number"
+                                    name="laundry"
+                                    id="laundry"
+                                    value={formData.laundry}
+                                    onChange={handleChange}
+                                    required
+                                    placeholder="Laundry Expenses"
                                     className="w-100 mt-2 py-3 px-3 rounded-lg bg-white border border-gray-400 text-gray-800 font-semibold focus:border-orange-500 focus:outline-none"
                                 />
                             </div>

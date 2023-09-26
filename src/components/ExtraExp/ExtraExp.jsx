@@ -1,16 +1,17 @@
 import { formSubmitHandler, post } from "../../helper/Auth";
 import { useContext, useEffect, useState } from 'react'
 
+import ExtraExpTable from "./ExtraExpTable";
 import Info from '../Info/Info';
 import Login from '../Login/Login';
 import UserContext from '../../context/UserContext'
 
-export default function UserTax() {
+export default function ExtraExp() {
     const [loading, setLoading ] = useState(false);
     const [resMessage, setResMessage] = useState({});
     const [reqType, setReqType] = useState("NEW_REQUEST");
     const [formData, setFormData] = useState({
-        taxPerYr:0, conversionRate:0, salaryPerYr:0
+        item:0, price:0, type:"oneTime" //oneTime/extraExp
     })
 
     const { loggedIn, loggedInUser } = useContext(UserContext);
@@ -18,33 +19,34 @@ export default function UserTax() {
     if(!loggedIn) {<Login />}
     
     const BASE_URL = import.meta.env.VITE_REACT_APP_URL;
-    const endpoint = "getUserTax"
+    const endpoint = "getAllExp"
     const dummyUsr = formData;
     dummyUsr["accessToken"] = loggedInUser?.accessToken
 
     useEffect(()=>{
         setLoading(true)
-        post( `${BASE_URL}/userTax/${endpoint}`, dummyUsr)
+        post( `${BASE_URL}/extraExp/${endpoint}`, dummyUsr)
         .then( response => {
             if(response.success === true || response.success === "true"){
                 setResMessage(response)
-                setFormData(response.data)
+                //setFormData(response.data)
                 setReqType("UPDATE_REQUEST")
             }else{
                 setResMessage(response)
-                setFormData(formData)
+                //setFormData(formData)
                 setReqType("NEW_REQUEST")
             }
             setLoading(false)
         })
     },[])
 
-    const handleChange = function(event){
+    const handleChange = function(event){ 
+        //console.log(event.target.name, event.target.value)
+        
         const name = event.target.name;
         const value = event.target.value;
         setFormData(values => ({...values, [name]: value}))
     }
-
     const handleUserSubmit = async function(event){
         event.preventDefault();
         console.log("formData - " + formData)
@@ -54,13 +56,13 @@ export default function UserTax() {
         
         let endpoint;
         if(reqType == "NEW_REQUEST"){
-            endpoint = "addUserTax"
+            endpoint = "create"
         }else if(reqType == "UPDATE_REQUEST"){
-            endpoint = "updateUserTax"
+            endpoint = "update"
         }
 
         setLoading(true)
-        await post( `${BASE_URL}/userTax/${endpoint}`, userTaxForm)
+        await post( `${BASE_URL}/extraExp/${endpoint}`, userTaxForm)
         .then( response => {
             if(response.success === true || response.success === "true"){
                 setResMessage(response)
@@ -77,57 +79,58 @@ export default function UserTax() {
             <div className="max-w-6xl mx-auto sm:px-6 lg:px-8">
                 <div className="mt-8 overflow-hidden">
                     <div className="grid grid-cols-1 md:grid-cols-2">
-                    <Info title="Get in Touch"/>
+                    <Info title="Extra Expenses (Overall)"/>
                         
                         <form className="p-6 flex flex-col justify-center" onSubmit={handleUserSubmit}>
                             {loading && <div className="text-green-700 font-bold">loading...</div>}
                             {resMessage ? <div className="text-red-700 font-bold">{resMessage.message}</div> : ""}
                             <div className="flex flex-col">
-                                <label htmlFor="taxPerYr" className="show">
-                                    Tax Per Year
+                                <label htmlFor="item" className="show">
+                                    Item Name
                                 </label>
                                 <input
-                                    type="number"
-                                    name="taxPerYr"
-                                    id="taxPerYr"
+                                    type="text"
+                                    name="item"
+                                    id="item"
                                     onChange={handleChange}
-                                    value={formData.taxPerYr}
+                                    value={formData.item}
                                     required
-                                    placeholder="Tax Per Year in %"
+                                    placeholder="Item Name"
                                     className="w-100 mt-2 py-3 px-3 rounded-lg bg-white border border-gray-400 text-gray-800 font-semibold focus:border-orange-500 focus:outline-none"
                                 />
                             </div>
 
                             <div className="flex flex-col mt-2">
-                                <label htmlFor="conversionRate" className="show">
-                                    Conversion Rate
+                                <label htmlFor="price" className="show">
+                                    Price
                                 </label>
                                 <input
                                     type="number"
-                                    name="conversionRate"
+                                    name="price"
+                                    id="price"
                                     required
-                                    value={formData.conversionRate}
+                                    value={formData.price}
                                     onChange={handleChange}
-                                    id="conversionRate"
-                                    placeholder="Conversion Rate (INR vs CAD)"
+                                    placeholder="Price (CAD)"
                                     className="w-100 mt-2 py-3 px-3 rounded-lg bg-white border border-gray-400 text-gray-800 font-semibold focus:border-orange-500 focus:outline-none"
                                 />
                             </div>
 
                             <div className="flex flex-col mt-2">
-                                <label htmlFor="salaryPerYr" className="show">
-                                    SalaryPerYr
+                                <label htmlFor="type" className="show">
+                                    Item Type
                                 </label>
-                                <input
-                                    type="number"
-                                    name="salaryPerYr"
-                                    value={formData.salaryPerYr}
+                                <select
+                                    name="type"
+                                    id="type"
+                                    value={formData.type}
                                     onChange={handleChange}
-                                    required
-                                    id="salaryPerYr"
-                                    placeholder="Salary Per Year"
+                                    placeholder="Item Type"
                                     className="w-100 mt-2 py-3 px-3 rounded-lg bg-white border border-gray-400 text-gray-800 font-semibold focus:border-orange-500 focus:outline-none"
-                                />
+                                >
+                                    <option value="oneTime">One Time</option>
+                                    <option value="extraExp">Extra Expenses</option>
+                                </select>
                             </div>
 
                             <button
@@ -138,6 +141,7 @@ export default function UserTax() {
                             </button>
                         </form>
                     </div>
+                    <ExtraExpTable />
                 </div>
             </div>
         </div>

@@ -50,7 +50,7 @@ export default function Login() {
                             {!error ? "": <div className="text-red-700 font-bold">Error: {loggedInUser.message} </div> }
                             {loading ? <div className="text-green-700 font-bold">loading...</div> : loading }
                             <div className="flex flex-col mt-2">
-                                <label htmlFor="email" className="hidden">
+                                <label htmlFor="email" className="show">
                                     Email
                                 </label>
                                 <input
@@ -58,6 +58,7 @@ export default function Login() {
                                     name="email"
                                     id="email"
                                     value={email}
+                                    autoComplete="email"
                                     onChange={(e) => setEmail(e.target.value)}
                                     required
                                     placeholder="Email"
@@ -66,15 +67,16 @@ export default function Login() {
                             </div>
 
                             <div className="flex flex-col mt-2">
-                                <label htmlFor="password" className="hidden">
+                                <label htmlFor="password" className="show">
                                     Password
                                 </label>
                                 <input
                                     type="password"
                                     name="password"
                                     value={password}
+                                    autoComplete="off"
                                     onChange={(e) => setPassword(e.target.value)}
-                                    required
+                                    required                                    
                                     minLength={6}
                                     id="password"
                                     placeholder="Password"

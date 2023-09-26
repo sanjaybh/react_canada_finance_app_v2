@@ -120,13 +120,14 @@ export default function SignUp() {
                             {resMessage ? <div className="text-red-700 font-bold">{resMessage.message}</div> : ""}
 
                             <div className="flex flex-col">
-                                <label htmlFor="name" className="hidden">
+                                <label htmlFor="name" className="show">
                                     Full Name
                                 </label>
                                 <input
                                     type="text"
                                     name="name" 
                                     id="name"
+                                    autoComplete="name"
                                     onChange={handleChange}
                                     value={inputs?.name || ""} 
                                     ref={inputNameRef}
@@ -138,12 +139,13 @@ export default function SignUp() {
                             </div>
 
                             <div className="flex flex-col mt-2">
-                                <label htmlFor="email" className="hidden">
+                                <label htmlFor="email" className="show">
                                     Email
                                 </label>
                                 <input
                                     type="email"
                                     name="email"
+                                    autoComplete="email"
                                     required
                                     onChange={handleChange}
                                     value={inputs?.email || ""} 
@@ -155,14 +157,15 @@ export default function SignUp() {
                             </div>
 
                             <div className="flex flex-col mt-2">
-                                <label htmlFor="password" className="hidden">
+                                <label htmlFor="password" className="show">
                                     Password
                                 </label>
                                 <input
                                     type="password"
                                     onChange={handleChange}
-                                    value={inputs?.password || "*******"} 
+                                    value={inputs?.password || (loggedIn) ? "******": ""} 
                                     name="password"
+                                    autoComplete="off"
                                     required
                                     minLength={6}
                                     ref={inputPasswordRef}
@@ -173,7 +176,7 @@ export default function SignUp() {
                             </div>
 
                             <div className="flex flex-col mt-2">
-                                <label htmlFor="tel" className="hidden">
+                                <label htmlFor="phone" className="show">
                                     Number
                                 </label>
                                 <input
@@ -181,6 +184,7 @@ export default function SignUp() {
                                     name="phone"
                                     value={inputs?.phone || ""} 
                                     onChange={handleChange}
+                                    autoComplete="off"
                                     required
                                     id="phone"
                                     placeholder="Telephone Number"
@@ -189,13 +193,14 @@ export default function SignUp() {
                             </div>
 
                             <div className="flex flex-col">
-                                <label htmlFor="city" className="hidden">
+                                <label htmlFor="city" className="show">
                                     City
                                 </label>
                                 <input
                                     type="text"
                                     name="city"
                                     id="city"
+                                    autoComplete="off"
                                     onChange={handleChange}
                                     value={inputs?.address.city || ""} 
                                     required
@@ -205,12 +210,13 @@ export default function SignUp() {
                             </div>
 
                             <div className="flex flex-col">
-                                <label htmlFor="country" className="hidden">
+                                <label htmlFor="country" className="show">
                                     Country
                                 </label>
                                 <input
                                     type="text"
                                     name="country"
+                                    autoComplete="off"
                                     value={inputs?.address?.country || ""} 
                                     required
                                     onChange={handleChange}
