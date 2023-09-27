@@ -10,16 +10,6 @@ export const isEmptyObject = (obj) => {
     return JSON.stringify(obj) === '{}'
 }
 
-export const formUpdateHandler = (currUser, event) => {//NOT IN USE
-    const formData = new FormData();    
-    const user = currUser;
-    for (let entry of formData.entries()) {
-        //user[entry[0]] = entry[1]
-        formData.set(user[entry[0]], entry[1]);
-    }
-    return formData;
-}
-
 export const formSubmitHandler = (event) => {
     const formData = new FormData(event.currentTarget);
     const user = {}
@@ -47,9 +37,13 @@ const request = ( url, params = {}, method = 'GET') => {
     return fetch( url, options ).then( response => response.json() );
 };
 
-// setTimeout(() => {
-//     console.log("delayed response by 1s")    
-// }, 1000);
+export const delayResponse = (callback) => {
+    setTimeout(() => {
+        callback()
+    }, 2000);
+}
+
+
 
 export const get = ( url, params ) => request( url, params, 'GET' );
 export const post = ( url, params ) => request( url, params, 'POST');

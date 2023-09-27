@@ -19,16 +19,21 @@ export default function RentExpenses() {
     
     const BASE_URL = import.meta.env.VITE_REACT_APP_URL;
     const endpoint = "getRentExpenses"
-    const dummyUsr = formData;
-    dummyUsr["accessToken"] = loggedInUser?.accessToken
+    
 
     useEffect(()=>{
+        const dummyUsr = formData;
+        dummyUsr["accessToken"] = loggedInUser?.accessToken
         setLoading(true)
         post( `${BASE_URL}/RentExpenses/${endpoint}`, dummyUsr)
         .then( response => {
             if(response.success === true || response.success === "true"){
                 setResMessage(response)
-                setFormData(response.data)
+                if(response.data == null || response.data.length <=0 ){
+                    setFormData(formData)
+                }else{
+                    setFormData(response.data)
+                }
                 setReqType("UPDATE_REQUEST")
             }else{
                 setResMessage(response)
@@ -42,6 +47,7 @@ export default function RentExpenses() {
     const handleChange = function(event){
         const name = event.target.name;
         const value = event.target.value;
+        //console.log(name, value)
         setFormData(values => ({...values, [name]: value}))
     }
 

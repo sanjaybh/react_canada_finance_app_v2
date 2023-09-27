@@ -10,8 +10,9 @@ export default function ExtraExp() {
     const [loading, setLoading ] = useState(false);
     const [resMessage, setResMessage] = useState({});
     const [reqType, setReqType] = useState("NEW_REQUEST");
+    const [tableData, setTableData] = useState([]);
     const [formData, setFormData] = useState({
-        item:0, price:0, type:"oneTime" //oneTime/extraExp
+        item:0, price:0, type:"ONETIME" //ONETIME/EXTRAEXP
     })
 
     const { loggedIn, loggedInUser } = useContext(UserContext);
@@ -19,21 +20,26 @@ export default function ExtraExp() {
     if(!loggedIn) {<Login />}
     
     const BASE_URL = import.meta.env.VITE_REACT_APP_URL;
-    const endpoint = "getAllExp"
-    const dummyUsr = formData;
-    dummyUsr["accessToken"] = loggedInUser?.accessToken
+    const endpoint = "getAllExp"    
 
     useEffect(()=>{
+        const dummyUsr = formData;
+        dummyUsr["accessToken"] = loggedInUser?.accessToken
         setLoading(true)
         post( `${BASE_URL}/extraExp/${endpoint}`, dummyUsr)
         .then( response => {
             if(response.success === true || response.success === "true"){
                 setResMessage(response)
-                //setFormData(response.data)
+                if(response.data == null || response.data.length <=0 ){
+                    setFormData(formData)
+                }else{
+                    setFormData(response.data[0])
+                    setTableData(response.data)
+                }
+                //Fill Table Data
                 setReqType("UPDATE_REQUEST")
             }else{
                 setResMessage(response)
-                //setFormData(formData)
                 setReqType("NEW_REQUEST")
             }
             setLoading(false)
@@ -49,7 +55,7 @@ export default function ExtraExp() {
     }
     const handleUserSubmit = async function(event){
         event.preventDefault();
-        console.log("formData - " + formData)
+        //console.log("formData - " + formData)
         
         const userTaxForm = formSubmitHandler(event)
         userTaxForm["accessToken"] = loggedInUser?.accessToken
@@ -59,6 +65,7 @@ export default function ExtraExp() {
             endpoint = "create"
         }else if(reqType == "UPDATE_REQUEST"){
             endpoint = "update"
+            userTaxForm["_id"] = formData["_id"]
         }
 
         setLoading(true)
@@ -67,6 +74,14 @@ export default function ExtraExp() {
             if(response.success === true || response.success === "true"){
                 setResMessage(response)
                 setLoading(false)
+
+                setTableData(response.data)
+                // if(response.data == null || response.data.length <=0 ){
+                //     setFormData(formData)
+                // }else{
+                //     setFormData(response.data[0])
+                //     setTableData(response.data)
+                // }
             }else{
                 setResMessage(response)
                 setLoading(false)
@@ -128,8 +143,8 @@ export default function ExtraExp() {
                                     placeholder="Item Type"
                                     className="w-100 mt-2 py-3 px-3 rounded-lg bg-white border border-gray-400 text-gray-800 font-semibold focus:border-orange-500 focus:outline-none"
                                 >
-                                    <option value="oneTime">One Time</option>
-                                    <option value="extraExp">Extra Expenses</option>
+                                    <option value="ONETIME">One Time</option>
+                                    <option value="EXTRAEXP">Extra Expenses</option>
                                 </select>
                             </div>
 
@@ -141,7 +156,8 @@ export default function ExtraExp() {
                             </button>
                         </form>
                     </div>
-                    <ExtraExpTable />
+                    {tableData.length >=0 ? <ExtraExpTable formData={formData} setFormData={setFormData} loadData={tableData} /> : "No Records found"}
+                    
                 </div>
             </div>
         </div>

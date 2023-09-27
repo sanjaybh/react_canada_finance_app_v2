@@ -1,28 +1,23 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+
 import Table from '../Table/Table';
 
-const ExtraExpTable = () => {
-    const data = React.useMemo(
-        () => [
-          { id: 1, item: 'John Doe', amount: 28 },
-          { id: 2, item: 'Jane Smith', amount: 32 }
-        ],
-        []
-      );
-    const columns = React.useMemo(
-        () => [
-          { Header: 'ID', accessor: 'id' },
-          { Header: 'Item', accessor: 'item' },
-          { Header: 'Amount', accessor: 'amount' },
-        ],
-        []
-      );
+const ExtraExpTable = ({loadData, formData, setFormData}) => {  
+  const columns = React.useMemo(
+    () => [      
+      { Header: 'Item', accessor: 'item', width:"15%" },
+      { Header: 'Price', accessor: 'price', width:"10%" },
+      { Header: 'Exp Type', accessor: 'type', width:"10%" },
+      { Header: 'Edit',  width:"1%" },
+      { Header: 'Delete',  width:"1%" }
+    ],[]
+  );
 
   return (
     <div>
-        <div>ExtraExpTable</div>
-        <div>
-            <Table columns={columns} data={data} /> 
+        <div className="font-bold">Extra Expenses Table</div>
+        <div className='relative overflow-x-auto'>
+            <Table columns={columns} formData={formData} setFormData={setFormData} data={loadData} /> 
         </div>
     </div>
   )
