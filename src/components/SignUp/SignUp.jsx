@@ -163,7 +163,7 @@ export default function SignUp() {
                                 <input
                                     type="password"
                                     onChange={handleChange}
-                                    value={inputs?.password || (loggedIn) ? "******": ""} 
+                                    value={inputs?.password || ""} 
                                     name="password"
                                     autoComplete="off"
                                     required
@@ -177,7 +177,7 @@ export default function SignUp() {
 
                             <div className="flex flex-col mt-2">
                                 <label htmlFor="phone" className="show">
-                                    Number
+                                    Phone
                                 </label>
                                 <input
                                     type="tel"

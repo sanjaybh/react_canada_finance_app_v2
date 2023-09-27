@@ -89,7 +89,7 @@ export default function UserTax() {
                             {resMessage ? <div className="text-red-700 font-bold">{resMessage.message}</div> : ""}
                             <div className="flex flex-col">
                                 <label htmlFor="taxPerYr" className="show">
-                                    Tax Per Year
+                                    Tax Per Year <span>(in %)</span>
                                 </label>
                                 <input
                                     type="number"
@@ -105,7 +105,7 @@ export default function UserTax() {
 
                             <div className="flex flex-col mt-2">
                                 <label htmlFor="conversionRate" className="show">
-                                    Conversion Rate
+                                    Conversion Rate <span>(CAD w.r.t INR)</span>
                                 </label>
                                 <input
                                     type="number"
@@ -121,7 +121,7 @@ export default function UserTax() {
 
                             <div className="flex flex-col mt-2">
                                 <label htmlFor="salaryPerYr" className="show">
-                                    SalaryPerYr
+                                    Salary Per Year <span>(in CAD)</span>
                                 </label>
                                 <input
                                     type="number"

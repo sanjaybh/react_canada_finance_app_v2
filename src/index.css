@@ -9,3 +9,7 @@ table, th, td {
 label.show {
     font-weight: bolder;
 }
+
+label span {
+    font-weight:500;
+}

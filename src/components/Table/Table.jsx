@@ -2,7 +2,7 @@ import { FaAddressCard, FaBackspace } from "react-icons/fa";
 
 import { useTable } from 'react-table';
 
-const Table = ({ columns, data, formData, setFormData }) => {
+const Table = ({ columns, data, formData, setFormData, setReqType }) => {
     const {
       getTableProps,
       getTableBodyProps,
@@ -20,6 +20,7 @@ const Table = ({ columns, data, formData, setFormData }) => {
 
     const handleRowClick = function(e, row){
       //console.log(row);
+      setReqType("UPDATE_REQUEST")
       setFormData(row.original)
     }
 

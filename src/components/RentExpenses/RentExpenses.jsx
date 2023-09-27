@@ -90,7 +90,7 @@ export default function RentExpenses() {
                             {resMessage ? <div className="text-red-700 font-bold">{resMessage.message}</div> : ""}
                             <div className="flex flex-col">
                                 <label htmlFor="roomRent" className="show">
-                                    Room Rent
+                                    Room Rent <span>(in CAD)</span>
                                 </label>
                                 <input
                                     type="number"
@@ -106,7 +106,7 @@ export default function RentExpenses() {
 
                             <div className="flex flex-col mt-2">
                                 <label htmlFor="hydro" className="show">
-                                    Hydro
+                                    Hydro <span>(in CAD)</span>
                                 </label>
                                 <input
                                     type="number"
@@ -122,7 +122,7 @@ export default function RentExpenses() {
 
                             <div className="flex flex-col mt-2">
                                 <label htmlFor="electricity" className="show">
-                                    Electricity
+                                    Electricity <span>(in CAD)</span>
                                 </label>
                                 <input
                                     type="number"
@@ -138,7 +138,7 @@ export default function RentExpenses() {
 
                             <div className="flex flex-col mt-2">
                                 <label htmlFor="water" className="show">
-                                    Water
+                                    Water <span>(in CAD)</span>
                                 </label>
                                 <input
                                     type="number"
@@ -154,7 +154,7 @@ export default function RentExpenses() {
 
                             <div className="flex flex-col mt-2">
                                 <label htmlFor="wifi" className="show">
-                                    Wi-fi
+                                    Wi-fi <span>(in CAD)</span>
                                 </label>
                                 <input
                                     type="number"
@@ -170,7 +170,7 @@ export default function RentExpenses() {
 
                             <div className="flex flex-col mt-2">
                                 <label htmlFor="laundry" className="show">
-                                    Laundry
+                                    Laundry <span>(in CAD)</span>
                                 </label>
                                 <input
                                     type="number"

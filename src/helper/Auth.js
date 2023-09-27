@@ -10,6 +10,26 @@ export const isEmptyObject = (obj) => {
     return JSON.stringify(obj) === '{}'
 }
 
+export const formElements = (formId) => {
+    var elements = document.getElementById(formId).elements;
+    var obj ={};
+    for(var i = 0 ; i < elements.length ; i++){
+        var item = elements.item(i);
+        obj[item.name] = item.value;
+    }
+    return obj;
+    //document.getElementById("demo").innerHTML = JSON.stringify(obj);
+}
+export const resetFormElements = (formId) => {
+    var elements = document.getElementById(formId).elements;
+    var obj ={};
+    for(var i = 0 ; i < elements.length ; i++){
+        var item = elements.item(i);
+        obj[item.name] = "";
+    }
+    return obj;
+}
+
 export const formSubmitHandler = (event) => {
     const formData = new FormData(event.currentTarget);
     const user = {}
@@ -39,8 +59,8 @@ const request = ( url, params = {}, method = 'GET') => {
 
 export const delayResponse = (callback) => {
     setTimeout(() => {
-        callback()
-    }, 2000);
+        callback
+    }, 5000);
 }
 
 
