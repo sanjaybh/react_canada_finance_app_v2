@@ -163,7 +163,7 @@ export default function SignUp() {
                                 <input
                                     type="password"
                                     onChange={handleChange}
-                                    value={inputs?.password || ""} 
+                                    value={inputs?.password || (loggedIn ? "******":"")} 
                                     name="password"
                                     autoComplete="off"
                                     required
