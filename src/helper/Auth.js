@@ -4,6 +4,8 @@ import { useContext } from 'react'
 export const SignOut = () => {
     const { setLoggedIn } = useContext(UserContext)
     setLoggedIn(false)
+    location.replace(location.origin);
+    
 };
 
 export const isEmptyObject = (obj) => {
