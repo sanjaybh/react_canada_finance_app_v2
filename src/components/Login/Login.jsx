@@ -19,7 +19,6 @@ export default function Login() {
     const handleSubmit = async function(event){
         event.preventDefault();
         const user = formSubmitHandler(event)
-
         setLoading(true)
         await post( `${BASE_URL}/auth/login`, user)
         .then( response => {

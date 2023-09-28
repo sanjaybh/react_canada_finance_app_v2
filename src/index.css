@@ -13,3 +13,7 @@ label.show {
 label span {
     font-weight:500;
 }
+
+#contactUs_form textarea {
+    resize: none;
+  }

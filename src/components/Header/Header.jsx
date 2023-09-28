@@ -1,16 +1,17 @@
 import {Link, NavLink} from 'react-router-dom'
 import {SignOut, delayResponse} from "../../helper/Auth"
+import { useContext, useState } from 'react'
 
 import UserContext from '../../context/UserContext'
-import { useContext } from 'react'
 import { useNavigate } from "react-router-dom";
 
 //import { useHistory } from "react-router-dom";
 
 export default function Header() {
+    //const [isHidden, setIsHidden] = useState("hidden")
     const { loggedIn } = useContext(UserContext)
     const navigate = useNavigate();
-    
+
     const handleLogOut = () =>{
         navigate("/login")
         delayResponse(SignOut())
@@ -41,6 +42,13 @@ export default function Header() {
                         >
                             {loggedIn ? "Edit Profile" : "Get Started"}
                         </Link>
+
+                        <Link
+                            to="/contact"
+                            className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none"
+                        > Contact Us                           
+                        </Link>
+                        
                     </div>
                     {/* {if logged in then show show menu else hide menu banner} */}
                     {loggedIn ? 
@@ -49,7 +57,7 @@ export default function Header() {
                         id="mobile-menu-2"
                     >
                         <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
-                            <li hidden>
+                            <li >
                                 <NavLink to="/user/123" >
                                     User
                                 </NavLink>
@@ -65,7 +73,7 @@ export default function Header() {
                                     Home
                                 </NavLink>
                             </li>
-                            <li hidden>
+                            <li >
                                 <NavLink
                                 to="/about"
                                     className={({isActive}) =>
@@ -107,18 +115,8 @@ export default function Header() {
                                     ExtraExp
                                 </NavLink>
                             </li>
-                            
-                            <li hidden>
-                                <NavLink
-                                to="/contact"
-                                    className={({isActive}) =>
-                                        `block py-2 pr-4 pl-3 duration-200 ${isActive ? "text-orange-700" : "text-gray-700"} border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`
-                                    }
-                                >
-                                    Contact
-                                </NavLink>
-                            </li>
-                            <li hidden>
+
+                            <li >
                                 <NavLink
                                 to="/github"
                                     className={({isActive}) =>
