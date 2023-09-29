@@ -31,8 +31,8 @@ export default function Home() {
             //const rentingSum = await getSumOfAllPropertesInObj(response.data, "userRentExp");
             //console.log("rentingSum - "+rentingSum)
             //console.log("<br />")
-            //const userTaxExp = await getSumOfAllPropertesInObj(response.data, "userTaxExp");
-            //console.log("userTaxExp - "+userTaxExp)
+            const userTaxExp = await getSumOfAllPropertesInObj(response.data, "userTaxExp");
+            console.log("userTaxExp - "+userTaxExp)
             
             //TODO:- This is where we left, will start implementing code after comming back to the app,
             // Where we are - data for the user is getting loaded from backend and will ensure its getting displayed on the screen in a predefined format.
