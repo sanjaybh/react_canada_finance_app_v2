@@ -1,11 +1,49 @@
+import { getSumOfAllPropertesInObj, getValueFromObjectProperty, post } from "../../helper/Auth";
+import { useContext, useEffect, useState } from 'react'
+
 import { Link } from 'react-router-dom';
 import Login from '../Login/Login';
 import UserContext from '../../context/UserContext'
-import { useContext } from 'react'
 
 export default function Home() {
-    const { loggedIn } = useContext(UserContext)
-    if(!loggedIn) return <Login />
+    const [loading, setLoading ] = useState(false);
+    const [formData, setFormData] = useState({})
+
+    const { loggedIn, loggedInUser } = useContext(UserContext)
+    if(!loggedIn) {
+        //<Login />
+        //location.replace(location.origin);
+    }
+    
+    const loadCompleteProfileData = async function(){
+        const BASE_URL = import.meta.env.VITE_REACT_APP_URL;
+
+        const endpoint = "getUserAllDetails"
+        const userAllDetails = formData;
+        userAllDetails["accessToken"] = loggedInUser?.accessToken
+
+        const response = await post(`${BASE_URL}/${endpoint}`, userAllDetails)
+        if(response.success == true || response.success === "true"){
+            //const roomRent = await getValueFromObjectProperty(response.data, "userRentExp", "roomRent");
+            //console.log("Room Rent - "+roomRent)
+
+            //getSum of all the Renting props per month
+            //const rentingSum = await getSumOfAllPropertesInObj(response.data, "userRentExp");
+            //console.log("rentingSum - "+rentingSum)
+            //console.log("<br />")
+            //const userTaxExp = await getSumOfAllPropertesInObj(response.data, "userTaxExp");
+            //console.log("userTaxExp - "+userTaxExp)
+            //TODO:- This is where we left, will start implementing code after comming back to the app,
+            // Where we are - data for the user is getting loaded from backend and will ensure its getting displayed on the screen in a predefined format.
+            setFormData(response.data)
+        }else{
+            setFormData(response)
+        }
+    }
+
+    useEffect(()=>{
+        loadCompleteProfileData()
+    },[])
 
     return (
         <div className="mx-auto w-full max-w-7xl">

@@ -32,6 +32,34 @@ export const resetFormElements = (formId) => {
     return obj;
 }
 
+export const getSumOfAllPropertesInObj = async (object, mainNode) => {
+    let obj = object || {};
+    let sum = 0;
+    if(isEmptyObject(object[mainNode]) === false){
+        for (const property in object[mainNode]) {
+            if(property !== "_id"){
+                sum += parseFloat(object[mainNode][property])
+            }
+        }
+        return sum;
+    }else{
+        return obj
+    }
+}
+/* findOne = SINGLE, MULTIPLE */
+export const getValueFromObjectProperty = async (object, mainNode, propertyName, findOne = "SINGLE") => {
+    let obj = object || {};
+    if(findOne == "SINGLE"){
+        if(isEmptyObject(object) === false){
+            return obj[mainNode][propertyName]
+        }else{
+            return obj
+        }
+    }else{
+        return []
+    }
+}
+
 export const formSubmitHandler = (event) => {
     const formData = new FormData(event.currentTarget);
     const user = {}
